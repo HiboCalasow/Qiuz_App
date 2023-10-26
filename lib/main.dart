@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+// import 'package:quiz_app/screens.dart';
 import 'package:quiz_app/quetions.dart';
+import 'package:quiz_app/results.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +51,8 @@ class _HomeState extends State<Home> {
   ];
 
   int quetionsIndex = 0;
+  int corrects = 0;
+  int incorrect = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +87,30 @@ class _HomeState extends State<Home> {
                         final isCorrect = questions[quetionsIndex].questionName;
 
                         setState(() {
-                          if (quetionsIndex < questions.length - 1) {
+                          if (quetionsIndex < questions.length - 1)
                             quetionsIndex++;
+                          else {
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Results(
+                                      answers: corrects, falses: incorrect),
+                                ),
+                              );
+                            });
                           }
                         });
                         if (isCorrect == true) {
                           print("waa true");
+                          setState(() {
+                            corrects = corrects + 1;
+                          });
                         } else {
                           print("waa false");
+                          setState(() {
+                            incorrect = incorrect + 1;
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -103,7 +123,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ],
-            ), 
+            ),
           ),
           Expanded(
             flex: 1,
@@ -117,14 +137,31 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         final isFalse = questions[quetionsIndex].questionAnswer;
                         setState(() {
-                          if (quetionsIndex < questions.length - 1) {
+                          if (quetionsIndex < questions.length - 1)
                             quetionsIndex++;
+                          else {
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Results(
+                                          answers: corrects,
+                                          falses: incorrect,
+                                        )),
+                              );
+                            });
                           }
                         });
                         if (isFalse == false) {
                           print("waa false");
+                          setState(() {
+                            corrects = corrects + 1;
+                          });
                         } else {
                           print("waa true");
+                          setState(() {
+                            incorrect = incorrect + 1;
+                          });
                         }
                       },
                       style:
@@ -139,6 +176,30 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+          // Expanded(
+          //     child: Row(
+          //       children: [
+          //       Container(
+          //     padding: const EdgeInsets.only(left: 22, right: 22),
+          //     height: 50,
+          //     child: Expanded(
+          //       child: ElevatedButton(
+          //         onPressed: () {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => const Screens(),
+          //             ),
+          //           );
+          //         },
+          //         style: ElevatedButton.styleFrom(),
+          //         child: const Text("Go Another Screens"),
+          //       ),
+          //     ),
+          //   ),
+          // ])
+          // )
+          // ,
         ],
       ),
     );
